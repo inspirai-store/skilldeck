@@ -13,7 +13,7 @@ fs.mkdirSync(config, { recursive: true });
 fs.writeFileSync(path.join(config, 'opencode.jsonc'), '{ // JSONC fixture\n"skills": ["~/packaged-source",],\n}');
 // This test exercises the shipped CJS artifact and its bundled runtime dependencies.
 const child = spawn(process.execPath, ['dist-electron/server.cjs'], {
-  env: { ...process.env, SKILLDECK_HOME: dir, SKILLDECK_DATA: path.join(dir, 'data') },
+  env: { ...process.env, SKILLDECK_HOME: dir, XDG_CONFIG_HOME: path.join(dir, '.config'), SKILLDECK_DATA: path.join(dir, 'data') },
   stdio: ['ignore', 'pipe', 'pipe'],
 });
 let stderr = '';

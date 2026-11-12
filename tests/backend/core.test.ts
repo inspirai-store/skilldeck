@@ -142,11 +142,12 @@ describe('migration and links', () => {
   it('archives and restores a relative symlink without altering its target', () => {
     const target = path.join(dir, 'target'); skill(target, 'hello'); fs.mkdirSync(path.join(dir, 'a'));
     fs.symlinkSync('../target', source());
+    const linkText = fs.readlinkSync(source());
     const before = fingerprint(target);
     apply({ kind: 'archive', bindingId: binding().id });
     const archived = bindings().find((b) => b.status === 'archived')!;
     apply({ kind: 'restore', archiveId: archived.archiveId! });
-    expect(fs.readlinkSync(source())).toBe('../target'); expect(fingerprint(target)).toBe(before);
+    expect(fs.readlinkSync(source())).toBe(linkText); expect(fingerprint(target)).toBe(before);
   });
   it('deletes a symlink only, and migrates its target into an independent copy', () => {
     const target = path.join(dir, 'target'); skill(target, 'hello'); fs.mkdirSync(path.join(dir, 'a')); fs.symlinkSync(target, source());
@@ -333,7 +334,7 @@ describe('additional regressions', () => {
     vi.spyOn(fs, 'cpSync').mockImplementation(() => { throw new Error('copy failed'); });
     const original = fs.renameSync;
     vi.spyOn(fs, 'renameSync').mockImplementation((from, to) => {
-      if (String(from).includes('/backups/')) throw new Error('restore failed');
+      if (String(from).split(/[\\/]/).includes('backups')) throw new Error('restore failed');
       return original(from, to);
     });
     expect(() => engine.apply(p.id)).toThrow('自动恢复失败');
