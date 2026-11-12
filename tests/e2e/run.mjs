@@ -121,7 +121,7 @@ await step('新建：预览后写入真实目录', async () => {
   await tid('create-body').fill('# e2e-new\n\nOriginal body.\n');
   await tid('create-preview').click();
   await tid('plan-changes').waitFor();
-  assert.match(await tid('plan-dialog').innerText(), /\.claude\/skills\/e2e-new/);
+  assert.match(await tid('plan-dialog').innerText(), /\.claude[\\/]skills[\\/]e2e-new/);
   assert.equal(exists('.claude/skills/e2e-new'), false, 'preview must not write');
   await shot('02-create-preview.png');
   await applyPlan();
