@@ -271,7 +271,7 @@ await step('扫描范围视图', async () => {
   await tid('nav-scope').click();
   await tid('scope-view').waitFor();
   const text = await tid('scope-view').innerText();
-  assert.match(text, /\.claude\/skills/);
+  assert.match(text, /\.claude[\\/]skills/);
   assert.match(text, /skillOverrides/);
   await tid('scope-codex').locator('tbody tr').first().click();
   await shot('09-scope.png');
