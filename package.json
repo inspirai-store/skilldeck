@@ -1,0 +1,104 @@
+{
+  "name": "skilldeck",
+  "productName": "SkillDeck",
+  "version": "0.1.1",
+  "description": "Local skill manager for coding agents",
+  "private": true,
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "build:ui": "vite build",
+    "build:main": "node scripts/build-main.mjs",
+    "build": "npm run build:ui && npm run build:main",
+    "start": "npm run build && electron .",
+    "serve": "npm run build && node dist-electron/server.cjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "npm run build && node tests/e2e/run.mjs",
+    "dist": "npm run build && electron-builder",
+    "test:backend": "vitest run tests/backend",
+    "serve:backend": "npm run build:main && node dist-electron/server.cjs",
+    "test:backend:bundle": "npm run build:main && node tests/backend/bundle-smoke.mjs"
+  },
+  "build": {
+    "appId": "dev.skilldeck.app",
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development",
+      "maintainer": "SkillDeck"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "icon": "build/icon.png",
+    "extraResources": [
+      {
+        "from": "docs/APP.md",
+        "to": "APP.md"
+      }
+    ],
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1",
+        "libsecret-1-0",
+        "libasound2t64 | libasound2"
+      ]
+    }
+  },
+  "dependencies": {
+    "diff": "^9.0.0",
+    "jsonc-parser": "^3.3.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "smol-toml": "^1.9.1",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.2",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "electron": "^45.3.1",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.65.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "homepage": "https://github.com/inspirai-store/skilldeck",
+  "license": "MIT",
+  "author": "inspirai-store",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inspirai-store/skilldeck.git"
+  }
+}
